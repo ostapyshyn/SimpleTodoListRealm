@@ -7,12 +7,19 @@
 //
 
 import UIKit
+import RealmSwift
 
 class TasksViewController: UITableViewController {
+    
+    var currentTasksList: TasksList!
+    
+    var currentTasks: Results<Task>!
+    var completedTasks: Results<Task>!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        title = currentTasksList.name
+        filteringTasks()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -33,23 +40,38 @@ class TasksViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 2
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return section == 0 ? currentTasks.count : completedTasks.count
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return section == 0 ? "CURRENT TASKS" : "COMPLETED TASKS"
     }
 
-    /*
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TasksCell", for: indexPath)
+        
+        var task: Task!
+        task = indexPath.section == 0 ? currentTasks[indexPath.row] : completedTasks[indexPath.row]
+        
+        cell.textLabel?.text = task.name
+        cell.detailTextLabel?.text = task.note
+        
         return cell
     }
-    */
+    
+    private func filteringTasks() {
+        currentTasks = currentTasksList.tasks.filter("isComplete = false")
+        completedTasks = currentTasksList.tasks.filter("isComplete = true")
+        
+        tableView.reloadData()
+    }
+    
 
     /*
     // Override to support conditional editing of the table view.

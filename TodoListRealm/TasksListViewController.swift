@@ -7,26 +7,34 @@
 //
 
 import UIKit
+import RealmSwift
 
 class TasksListViewController: UITableViewController {
 
+    var tasksLists: Results<TasksList>!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let shopingList = TasksList()
-        shopingList.name = "Shopping List"
-        
-        let moviesList = TasksList(value: ["Movies List", Date(), [["John Wick"], ["Tor", "", Date(), true]]])
-        
-        let milk = Task()
-        milk.name = "Milk"
-        milk.note = "2L"
-        
-        let bread = Task(value: ["Bread", "", Date(), true])
-        let apples = Task(value: ["name": "Apples", "note": "2Kg"])
-        
-        shopingList.tasks.append(milk)
-        shopingList.tasks.insert(contentsOf: [bread, apples], at: 1)
+        tasksLists = realm.objects(TasksList.self)
+//        let shopingList = TasksList()
+//        shopingList.name = "Shopping List"
+//
+//        let moviesList = TasksList(value: ["Movies List", Date(), [["John Wick"], ["Tor", "", Date(), true]]])
+//
+//        let milk = Task()
+//        milk.name = "Milk"
+//        milk.note = "2L"
+//
+//        let bread = Task(value: ["Bread", "", Date(), true])
+//        let apples = Task(value: ["name": "Apples", "note": "2Kg"])
+//
+//        shopingList.tasks.append(milk)
+//        shopingList.tasks.insert(contentsOf: [bread, apples], at: 1)
+//
+//        DispatchQueue.main.async {
+//            StorageManager.saveTasksList([shopingList, moviesList])
+//        }
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -46,24 +54,28 @@ class TasksListViewController: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
-    }
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return tasksLists.count
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TaskListCell", for: indexPath)
-
-       
         
-
+        let tasksList = tasksLists[indexPath.row]
+        cell.textLabel?.text = tasksList.name
+        cell.detailTextLabel?.text = "\(tasksList.tasks.count)"
+        
         return cell
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let indexPath = tableView.indexPathForSelectedRow {
+            let tasksList = tasksLists[indexPath.row]
+            let tasksVC = segue.destination as! TasksViewController
+            tasksVC.currentTasksList = tasksList
+        }
     }
     
 
@@ -126,6 +138,8 @@ extension TasksListViewController {
         
         let saveAction = UIAlertAction(title: "Save", style: .default) { _ in
             guard let text = alertTextField.text , !text.isEmpty else { return }
+            
+            
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
