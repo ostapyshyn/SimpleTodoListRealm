@@ -15,7 +15,7 @@ class TasksListViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        navigationItem.leftBarButtonItem = editButtonItem
         tasksLists = realm.objects(TasksList.self)
 //        let shopingList = TasksList()
 //        shopingList.name = "Shopping List"
@@ -42,7 +42,11 @@ class TasksListViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
-    @IBAction func editButtonPressed(_ sender: Any) {
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
     }
     
     @IBAction func  addButtonPressed(_ sender: Any) {
@@ -68,6 +72,33 @@ class TasksListViewController: UITableViewController {
         cell.detailTextLabel?.text = "\(tasksList.tasks.count)"
         
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        let currentList = tasksLists[indexPath.row]
+        
+        let deleteAction = UITableViewRowAction(style: .default, title: "Delete") { _, _ in
+            
+            StorageManager.deleteList(currentList)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+        
+        let editAction = UITableViewRowAction(style: .normal, title: "Edit") { (_, _) in
+            self.alerForAddAndUpdateList(currentList, complition: {
+                tableView.reloadRows(at: [indexPath], with: .automatic)
+            })
+        }
+//
+        let doneAction = UITableViewRowAction(style: .normal, title: "Done") { (_, _) in
+            StorageManager.makeAllDone(currentList)
+            tableView.reloadRows(at: [indexPath], with: .automatic)
+        }
+        
+        editAction.backgroundColor = .orange
+        doneAction.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        return [deleteAction, doneAction, editAction]
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -131,14 +162,34 @@ class TasksListViewController: UITableViewController {
 
 extension TasksListViewController {
     
-    private func alerForAddAndUpdateList() {
+    private func alerForAddAndUpdateList(_ listName: TasksList? = nil, complition: (() -> Void)? = nil) {
         
-        let alert = UIAlertController(title: "New List", message: "Please insert new value", preferredStyle: .alert)
+        var title = "New List"
+        var doneButton = "Save"
+        
+        if listName != nil {
+            title = "Edit List"
+            doneButton = "Update"
+        }
+        
+        let alert = UIAlertController(title: title, message: "Please insert new value", preferredStyle: .alert)
         var alertTextField: UITextField!
         
-        let saveAction = UIAlertAction(title: "Save", style: .default) { _ in
-            guard let text = alertTextField.text , !text.isEmpty else { return }
+        let saveAction = UIAlertAction(title: doneButton, style: .default) { _ in
+            guard let newList = alertTextField.text , !newList.isEmpty else { return }
             
+            if let listName = listName {
+                StorageManager.editList(listName, newListName: newList)
+                if complition != nil { complition!() }
+            } else {
+                let tasksList = TasksList()
+                tasksList.name = newList
+                
+                StorageManager.saveTasksList(tasksList)
+                self.tableView.insertRows(at: [IndexPath(
+                    row: self.tasksLists.count - 1, section: 0)], with: .automatic
+                )
+            }
             
         }
         
@@ -150,6 +201,10 @@ extension TasksListViewController {
         alert.addTextField { textField in
             alertTextField = textField
             alertTextField.placeholder = "List Name"
+        }
+        
+        if let listName = listName {
+            alertTextField.text = listName.name
         }
         
         present(alert, animated: true)

@@ -27,6 +27,8 @@ class TasksViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
+    
+    
     @IBAction func editButtonPressed(_ sender: Any) {
         
     }
@@ -122,15 +124,42 @@ class TasksViewController: UITableViewController {
 
 extension TasksViewController {
     
-    private func alertForAddAndUpdateList() {
+    private func alertForAddAndUpdateList(_ taskName: Task? = nil) {
         
-        let alert = UIAlertController(title: "New Task", message: "Please insert task value", preferredStyle: .alert)
+        var title = "New Task"
+        var doneButton = "Save"
+        
+        if taskName != nil {
+            title = "Edit Task"
+            doneButton = "Update"
+        }
+        
+        let alert = UIAlertController(title: title, message: "Please insert task value", preferredStyle: .alert)
         var taskTextField: UITextField!
         var noteTextField: UITextField!
         
-        let saveAction = UIAlertAction(title: "Save", style: .default) { _ in
-            guard let text = taskTextField.text , !text.isEmpty else { return }
+        let saveAction = UIAlertAction(title: doneButton, style: .default) { _ in
+            guard let newTask = taskTextField.text , !newTask.isEmpty else { return }
             
+            if let taskName = taskName {
+                if let newNote = noteTextField.text, !newNote.isEmpty {
+                    StorageManager.editTask(taskName, newTask: newTask, newNote: newNote)
+                } else {
+                    StorageManager.editTask(taskName, newTask: newTask, newNote: "")
+                }
+                
+                self.filteringTasks()
+            } else {
+                let task = Task()
+                task.name = newTask
+                
+                if let note = noteTextField.text, !note.isEmpty {
+                    task.note = note
+                }
+                
+                StorageManager.saveTask(self.currentTasksList, task: task)
+                self.filteringTasks()
+            }
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
@@ -141,11 +170,20 @@ extension TasksViewController {
         alert.addTextField { textField in
             taskTextField = textField
             taskTextField.placeholder = "New task"
+            
+            if let taskName = taskName {
+                taskTextField.text = taskName.name
+            }
         }
+        
         
         alert.addTextField { textField in
             noteTextField = textField
             noteTextField.placeholder = "Note"
+            
+            if let taskName = taskName {
+                noteTextField.text = taskName.note
+            }
         }
         
         present(alert, animated: true)

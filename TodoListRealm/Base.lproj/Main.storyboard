@@ -60,11 +60,6 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Tasks Lists" id="90j-tQ-zWL">
-                        <barButtonItem key="leftBarButtonItem" systemItem="edit" id="26w-dx-Gsn">
-                            <connections>
-                                <action selector="editButtonPressed:" destination="V1P-G5-bJx" id="lKT-Qw-09y"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="Jbl-xG-Qwe">
                             <connections>
                                 <action selector="addButtonPressed:" destination="V1P-G5-bJx" id="QII-Sk-Z2P"/>
