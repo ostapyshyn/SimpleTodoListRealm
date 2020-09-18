@@ -54,6 +54,13 @@ class TasksListViewController: UITableViewController {
     }
     
     @IBAction func sortingList(_ sender: UISegmentedControl) {
+        if sender.selectedSegmentIndex == 0 {
+            tasksLists = tasksLists.sorted(byKeyPath: "name")
+        } else {
+            tasksLists = tasksLists.sorted(byKeyPath: "date")
+        }
+        
+        tableView.reloadData()
     }
 
     // MARK: - Table view data source
@@ -68,8 +75,8 @@ class TasksListViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TaskListCell", for: indexPath)
         
         let tasksList = tasksLists[indexPath.row]
-        cell.textLabel?.text = tasksList.name
-        cell.detailTextLabel?.text = "\(tasksList.tasks.count)"
+        
+        cell.configure(with: tasksList)
         
         return cell
     }

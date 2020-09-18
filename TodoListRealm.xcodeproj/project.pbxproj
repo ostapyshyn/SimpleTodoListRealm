@@ -10,6 +10,7 @@
 		0B4DCB502510DAAF00766EE2 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4DCB4F2510DAAF00766EE2 /* Task.swift */; };
 		0B4DCB522510DAE600766EE2 /* TasksList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4DCB512510DAE600766EE2 /* TasksList.swift */; };
 		0B4DCB542510F3F400766EE2 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4DCB532510F3F400766EE2 /* StorageManager.swift */; };
+		0B678A3A251481FE006A1735 /* Extension + UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B678A39251481FE006A1735 /* Extension + UITableViewCell.swift */; };
 		0BBC86112510A6DD0013FD0D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBC86102510A6DD0013FD0D /* AppDelegate.swift */; };
 		0BBC86132510A6DD0013FD0D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBC86122510A6DD0013FD0D /* SceneDelegate.swift */; };
 		0BBC86152510A6DD0013FD0D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBC86142510A6DD0013FD0D /* ViewController.swift */; };
@@ -25,6 +26,7 @@
 		0B4DCB4F2510DAAF00766EE2 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		0B4DCB512510DAE600766EE2 /* TasksList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksList.swift; sourceTree = "<group>"; };
 		0B4DCB532510F3F400766EE2 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
+		0B678A39251481FE006A1735 /* Extension + UITableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension + UITableViewCell.swift"; sourceTree = "<group>"; };
 		0BBC860D2510A6DD0013FD0D /* TodoListRealm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TodoListRealm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0BBC86102510A6DD0013FD0D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0BBC86122510A6DD0013FD0D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 				0B4DCB512510DAE600766EE2 /* TasksList.swift */,
 				0BBC86162510A6DD0013FD0D /* Main.storyboard */,
 				0BBC86242510BB4A0013FD0D /* TasksListViewController.swift */,
+				0B678A39251481FE006A1735 /* Extension + UITableViewCell.swift */,
 				0B4DCB532510F3F400766EE2 /* StorageManager.swift */,
 				0BBC86262510C45C0013FD0D /* TasksViewController.swift */,
 				0BBC86192510A6E00013FD0D /* Assets.xcassets */,
@@ -227,6 +230,7 @@
 				0BBC86272510C45C0013FD0D /* TasksViewController.swift in Sources */,
 				0BBC86112510A6DD0013FD0D /* AppDelegate.swift in Sources */,
 				0B4DCB502510DAAF00766EE2 /* Task.swift in Sources */,
+				0B678A3A251481FE006A1735 /* Extension + UITableViewCell.swift in Sources */,
 				0BBC86132510A6DD0013FD0D /* SceneDelegate.swift in Sources */,
 				0B4DCB542510F3F400766EE2 /* StorageManager.swift in Sources */,
 			);

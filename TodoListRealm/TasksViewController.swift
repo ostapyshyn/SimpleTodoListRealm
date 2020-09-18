@@ -13,8 +13,10 @@ class TasksViewController: UITableViewController {
     
     var currentTasksList: TasksList!
     
-    var currentTasks: Results<Task>!
-    var completedTasks: Results<Task>!
+    private var currentTasks: Results<Task>!
+    private var completedTasks: Results<Task>!
+    
+    private var isEditingMode = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,7 +32,8 @@ class TasksViewController: UITableViewController {
     
     
     @IBAction func editButtonPressed(_ sender: Any) {
-        
+        isEditingMode.toggle()
+        tableView.setEditing(isEditingMode, animated: true)
     }
     
     @IBAction func addButtonPressed(_ sender: Any) {
@@ -72,6 +75,33 @@ class TasksViewController: UITableViewController {
         completedTasks = currentTasksList.tasks.filter("isComplete = true")
         
         tableView.reloadData()
+    }
+    
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        var task: Task!
+        
+        task = indexPath.section == 0 ? currentTasks[indexPath.row] : completedTasks[indexPath.row]
+        
+        let deleteAction = UITableViewRowAction(style: .default, title: "Delete") { (_, _) in
+            StorageManager.deleteTask(task)
+            self.filteringTasks()
+        }
+        
+        let editAction = UITableViewRowAction(style: .normal, title: "Edit") { (_, _) in
+            self.alertForAddAndUpdateList(task)
+            self.filteringTasks()
+        }
+        
+        let doneAction = UITableViewRowAction(style: .normal, title: "Done") { (_, _) in
+            StorageManager.makeDone(task)
+            self.filteringTasks()
+        }
+        
+        editAction.backgroundColor = .orange
+        doneAction.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        
+        return [deleteAction, doneAction, editAction]
     }
     
 
